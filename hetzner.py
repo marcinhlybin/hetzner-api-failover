@@ -41,11 +41,10 @@ class Hetzner:
         reqs = self.failover_requests()
         for idx, req in enumerate(grequests.map(reqs)):
             failover_address = self.failover_addresses[idx]
-            self.print_message("INFO Hetzner route {} to {} [{}] started".format(failover_address, self.server_address, self.server_host))
             if req.status_code != 200:
                 try:
                     res = json.loads(req.content)
-                    self.print_message("ERROR Hetzner route {} to {} [{}]: {} -- {}".format(failover_address, self.server_address, self.server_host, res['error']['status'], res['error']['message']), error=True)
+                    self.print_message("ERROR Hetzner route {} to {} [{}]: {}".format(failover_address, self.server_address, self.server_host, res['error']['message']), error=True)
                 except ValueError:
                     self.print_message("ERROR Hetzner route {} to {} [{}] failed".format(failover_address, self.server_address, self.server_host), error=True)
             else:
