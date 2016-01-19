@@ -53,7 +53,7 @@ class Hetzner:
 
     def print_message(self, message, error=False):
         if self.syslog and error:
-            s.syslog(syslog.LOG_ERR, message)
+            s.syslog(s.LOG_ERR, message)
         elif self.syslog and not error:
             s.syslog(message)
         else:
@@ -64,9 +64,10 @@ class Hetzner:
         headers = { 'content-type': 'application/json' }
         auth = (self.api_user, self.api_password)
 
-        for failover_address in failover_addresses:
+        for failover_address in self.failover_addresses:
             url = self.api_url + '/failover/' + failover_address
             yield grequests.post(url, params=params, headers=headers, auth=auth)
 
 if __name__ == '__main__':
     hetzner = Hetzner(CONFIG_FILE)
+    hetzner.failover()
