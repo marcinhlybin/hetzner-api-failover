@@ -5,6 +5,8 @@
 # Keepalived configuration:
 # notify_master "/usr/local/sbin/hetzner.py"
 #
+# Marcin Hlybin, ahes@sysadmin.guru
+#
 import json
 import syslog as s
 import socket
