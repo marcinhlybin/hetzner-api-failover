@@ -36,6 +36,8 @@ Add following line to your `keepalived.conf`:
 notify_master "/usr/local/sbin/keepalived-hetzner.py"
 ```
 
+See `keepalived-sample.conf` file for full example.
+
 ### /etc/keepalived/hetzner.conf
 
 See sample file `hetzner-sample.conf`.
