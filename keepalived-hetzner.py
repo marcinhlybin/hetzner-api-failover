@@ -63,23 +63,24 @@ def request(failover_address):
         headers = { 'content-type': 'application/json' }
         auth = (c['api_user'], c['api_password'])
         url = c['api_url'] + '/failover/' + failover_address
+        failover_requested = False
         try:
             r = requests.post(url, params=params, headers=headers, auth=auth, timeout=CONNECTION_TIMEOUT)
+            res = r.json()
             if r.status_code == STATUS_OK:
                 log("Hetzner failover requested: {} -> {} [{}]".format(failover_address, c['server_address'], c['server_host']))
+                failover_requested = True
                 time.sleep(30)
                 continue
-            elif r.status_code == STATUS_ALREADY_ROUTED:
-                res = json.loads(r.content)
-                if res['error']['code'] == 'FAILOVER_ALREADY_ROUTED':
+            elif r.status_code == STATUS_ALREADY_ROUTED and res['error']['code'] == 'FAILOVER_ALREADY_ROUTED':
+                if failover_requested:
                     log("Hetzner failover finished: {} -> {} [{}]".format(failover_address, c['server_address'], c['server_host']))
-                    break
-                else:
-                    log("Hetzner failover in progress: {} -> {} [{}]".format(failover_address, c['server_address'], c['server_host']))
-                    time.sleep(30)
-                    continue
+                break
+            elif r.status_code == STATUS_ALREADY_ROUTED:
+                log("Hetzner failover in progress: {} -> {} [{}]".format(failover_address, c['server_address'], c['server_host']))
+                time.sleep(30)
+                continue
             else:
-                res = json.loads(r.content)
                 error_message = res.get('error', {}).get('message') or 'Connection error'
                 log("ERROR: Hetzner failover failed: {} -> {} [{}]: {}".format(failover_address, c['server_address'], c['server_host'], error_message))
                 if args.exit:
