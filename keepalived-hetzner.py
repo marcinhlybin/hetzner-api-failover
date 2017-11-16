@@ -31,7 +31,7 @@ CONFIG_OPTIONS = (
 
 def log(message):
     s.syslog(message)
-    if args.debug:
+    if args.verbose:
         print message
 
 def read_config(config_file):
@@ -100,7 +100,7 @@ if __name__ == '__main__':
             formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument('--config', '-c', dest='config', default=CONFIG_FILE, help='config file')
     parser.add_argument('--exit', '-e', action='store_true', default=False, help='exit on error immediately')
-    parser.add_argument('--debug', '-d', action='store_true', default=False, help='output messages to stdout')
+    parser.add_argument('--verbose', '-v', action='store_true', default=False, help='output messages to stdout')
     args = parser.parse_args()
 
     c = read_config(args.config)
