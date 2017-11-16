@@ -38,6 +38,9 @@ notify_master "/usr/local/sbin/keepalived-hetzner.py"
 
 See `keepalived-sample.conf` file for full example.
 
+Alternatively you can use `keepalived-cron.py` script to run `keepalived-hetzner.py` script from crontab every minute.
+In some edge cases with keepalived (e.g. flapping scenario) notify_master excecution cannot be trusted leading to inconsistent routing configuration.
+
 ### /etc/keepalived/hetzner.conf
 
 See sample file `hetzner-sample.conf`.
